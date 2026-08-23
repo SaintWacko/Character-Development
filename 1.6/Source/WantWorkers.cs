@@ -8,7 +8,7 @@ namespace WantsAndQuirks
     {
         public override bool IsSatisfied(Pawn pawn)
         {
-            return pawn.needs?.mood?.thoughts?.memories?.GetFirstMemoryOfDef(def.completedByThought) != null;
+            return WantsAndQuirksUtility.HasThought(pawn, def.completedByThought);
         }
     }
 
@@ -246,11 +246,11 @@ namespace WantsAndQuirks
     {
         public override bool IsSatisfied(Pawn pawn)
         {
-            if (def.targetThoughts.NullOrEmpty() || pawn.needs?.mood?.thoughts?.memories == null)
+            if (def.targetThoughts.NullOrEmpty() || pawn.needs?.mood?.thoughts == null)
                 return false;
             foreach (var t in def.targetThoughts)
             {
-                if (pawn.needs.mood.thoughts.memories.GetFirstMemoryOfDef(t) != null)
+                if (WantsAndQuirksUtility.HasThought(pawn, def.completedByThought))
                     return true;
             }
             return false;
@@ -390,7 +390,8 @@ namespace WantsAndQuirks
         public override bool CanGenerate(Pawn pawn) => GetRandomTarget(pawn) != null;
         public override Def GetRandomTarget(Pawn pawn)
         {
-            var undiscovered = DefDatabase<FactionDef>.AllDefsListForReading.Where(d => !d.isPlayer && d.hidden is false && !DiscoveryCompat.IsDiscovered(d));
+            var meetable = Find.WorldObjects.Settlements.Where(s => s.Faction != null).Select(s => s.Faction.def).ToHashSet();
+            var undiscovered = DefDatabase<FactionDef>.AllDefsListForReading.Where(d => !d.isPlayer && d.hidden is false && meetable.Contains(d) && !DiscoveryCompat.IsDiscovered(d));
             return undiscovered.TryRandomElement(out var result) ? result : null;
         }
         public override bool IsTargetDiscovered(Def target) => target is FactionDef faction && DiscoveryCompat.IsDiscovered(faction);
@@ -871,6 +872,14 @@ namespace WantsAndQuirks
         {
             var bed = pawn.ownership.OwnedBed;
             return bed != null && bed.SleepingSlotsCount >= 2;
+        }
+    }
+
+    public class WantWorker_Imprisoned : WantWorker
+    {
+        public override bool IsSatisfied(Pawn pawn)
+        {
+            return pawn.IsPrisoner;
         }
     }
 }
