@@ -250,7 +250,7 @@ namespace WantsAndQuirks
                 return false;
             foreach (var t in def.targetThoughts)
             {
-                if (WantsAndQuirksUtility.HasThought(pawn, def.completedByThought))
+                if (WantsAndQuirksUtility.HasThought(pawn, t))
                     return true;
             }
             return false;
