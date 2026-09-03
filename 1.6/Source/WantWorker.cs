@@ -12,6 +12,9 @@ namespace WantsAndQuirks
             if (!def.CanGenerate())
                 return false;
 
+            if (WantsAndQuirksMod.settings.disabledWantDefNames.Contains(def.defName))
+                return false;
+
             if (def.minimumColonists > 0 && Find.Maps.Where(m => m.IsPlayerHome).SelectMany(m => m.mapPawns.FreeColonistsSpawned).Count() < def.minimumColonists)
                 return false;
 
@@ -31,6 +34,18 @@ namespace WantsAndQuirks
         public virtual bool IsCompleted(Pawn pawn, WantWorkerContext context)
         {
             return IsSatisfied(pawn);
+        }
+
+        public virtual ActiveWant CreateActiveWant(Pawn pawn)
+        {
+            return new ActiveWant();
+        }
+
+        public virtual bool TryGetProgress(Pawn pawn, ActiveWant want, out float current, out float target)
+        {
+            current = 0f;
+            target = 0f;
+            return false;
         }
 
         public virtual Pawn GetRandomTargetPawn(Pawn pawn)

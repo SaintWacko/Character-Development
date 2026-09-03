@@ -10,6 +10,7 @@ namespace WantsAndQuirks
     {
         public Type workerClass = typeof(WantWorker);
         public string iconPath;
+        public ThingDef iconThingPath;
         public bool preferIconPath;
         public int reward = 1000;
         public float commonality = 1f;
@@ -52,6 +53,6 @@ namespace WantsAndQuirks
             }
         }
 
-        public Texture2D Icon => iconInt ??= ContentFinder<Texture2D>.Get(iconPath);
+        public Texture2D Icon => iconThingPath != null ? iconThingPath.uiIcon : (iconInt ??= ContentFinder<Texture2D>.Get(iconPath));
     }
 }

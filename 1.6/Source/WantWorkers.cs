@@ -372,6 +372,36 @@ namespace WantsAndQuirks
     public class WantWorker_Record : WantWorker
     {
         public override bool IsSatisfied(Pawn pawn) => pawn.records?.GetValue(def.targetRecord) >= def.countThreshold;
+
+        public override bool TryGetProgress(Pawn pawn, ActiveWant want, out float current, out float target)
+        {
+            current = pawn.records?.GetValue(def.targetRecord) ?? 0f;
+            target = def.countThreshold;
+            return true;
+        }
+    }
+
+    public class WantWorker_RecordChange : WantWorker
+    {
+        public override ActiveWant CreateActiveWant(Pawn pawn)
+        {
+            return new ActiveWantWithRecordBaseline
+            {
+                baselineValue = pawn.records?.GetValue(def.targetRecord) ?? 0f
+            };
+        }
+
+        public override bool TryGetProgress(Pawn pawn, ActiveWant want, out float current, out float target)
+        {
+            current = 0f;
+            target = def.countThreshold;
+            if (want is ActiveWantWithRecordBaseline baseline && pawn.records != null)
+            {
+                current = pawn.records.GetValue(def.targetRecord) - baseline.baselineValue;
+                return true;
+            }
+            return false;
+        }
     }
 
     public class WantWorker_DiscoverAnimal : WantWorker

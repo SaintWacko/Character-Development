@@ -147,6 +147,22 @@ namespace WantsAndQuirks
         }
     }
 
+    public class ActiveWantWithRecordBaseline : ActiveWant
+    {
+        public float baselineValue;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref baselineValue, "baselineValue");
+        }
+
+        public override bool IsCompleted(Pawn pawn, WantWorkerContext context)
+        {
+            return pawn.records != null && pawn.records.GetValue(def.targetRecord) - baselineValue >= def.countThreshold;
+        }
+    }
+
     public class GrantedGeneLink : IExposable
     {
         public Gene gene;

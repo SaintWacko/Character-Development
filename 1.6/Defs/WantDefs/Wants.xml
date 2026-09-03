@@ -844,7 +844,7 @@
         <description>I'd like to feel an inspiration.</description>
         <iconPath>UI/WantIcons/Inspiration</iconPath>
         <reward>1000</reward>
-        <commonality>1</commonality>
+        <commonality>0.7</commonality>
         <workerClass>WantsAndQuirks.WantWorker_Inspired</workerClass>
     </WantsAndQuirks.WantDef>
 
@@ -1460,6 +1460,599 @@
         <minimumTechLevel>Neolithic</minimumTechLevel>
     </WantsAndQuirks.WantDef>
 
+
+<!-- NEW, AUG 2026 -->
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantMasochistPain</defName>
+        <label>Masochist pain</label>
+        <description>I'd like to feel the good pain.</description>
+        <iconPath>UI/WantIcons/Pain</iconPath>
+        <reward>300</reward>
+        <commonality>3</commonality>
+        <requiredTraits>
+            <li>Masochist</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>MasochistPain</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>WQE_WantMasochistCollar</defName>
+        <label>wear a collar</label>
+        <description>I'd like to be restrained with a collar.</description>
+        <iconPath>UI/WantIcons/Collar</iconPath>
+        <reward>500</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li>Masochist</li>
+        </requiredTraits>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>MasochistWearingCollar</completedByThought>
+        <discoveryRequirementThing>Apparel_Collar</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>WQE_WantMasochistBodyStrap</defName>
+        <label>wear a body strap</label>
+        <description>I'd like to be restrained with a body strap.</description>
+        <iconPath>UI/WantIcons/Bodystrap</iconPath>
+        <reward>500</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li>Masochist</li>
+        </requiredTraits>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>MasochistWearingBodyStrap</completedByThought>
+        <discoveryRequirementThing>Apparel_BodyStrap</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantFirstHeadshot</defName>
+        <label>land my first headshot</label>
+        <description>I'd like my aim to be good enough to achieve a proper headshot.</description>
+        <iconPath>UI/WantIcons/Headshots</iconPath>
+        <reward>1200</reward>
+        <commonality>1</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_Record</workerClass>
+        <targetRecord>Headshots</targetRecord>
+        <countThreshold>1</countThreshold>
+        <invalidNonViolent>true</invalidNonViolent>
+        <requiredSkill>Shooting</requiredSkill>
+        <requiredSkillLevel>3</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantHeadshots</defName>
+        <label>land headshots</label>
+        <description>I'd like to perfect my aim, I should practice getting around a dozen headshots in.</description>
+        <iconPath>UI/WantIcons/Headshots</iconPath>
+        <reward>1200</reward>
+        <commonality>1</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>Headshots</targetRecord>
+        <countThreshold>12</countThreshold>
+        <invalidNonViolent>true</invalidNonViolent>
+        <requiredSkill>Shooting</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantTimesOnFire</defName>
+        <label>be on fire</label>
+        <description>I'd like to be on fire.</description>
+        <iconPath>UI/WantIcons/OnFire</iconPath>
+        <reward>1500</reward>
+        <commonality>1.2</commonality>
+        <requiredTraits>
+            <li>Masochist</li>
+            <li>Pyromaniac</li>
+        </requiredTraits>
+        <requiredTraitsAny>true</requiredTraitsAny>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>TimesOnFire</targetRecord>
+        <countThreshold>1</countThreshold>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantTimesOnFireBreak</defName>
+        <label>be on fire</label>
+        <description>Maybe I should burn, even just for a moment.</description>
+        <iconPath>UI/WantIcons/OnFire</iconPath>
+        <reward>500</reward>
+        <commonality>0.5</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>TimesOnFire</targetRecord>
+        <countThreshold>1</countThreshold>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantTendOthers</defName>
+        <label>tend to others</label>
+        <description>I'd like to help the wounded, at least 20 tends should do it.</description>
+        <iconPath>UI/WantIcons/Tend</iconPath>
+        <reward>2000</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li>Kind</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>TimesTendedOther</targetRecord>
+        <countThreshold>20</countThreshold>
+        <requiredSkill>Medicine</requiredSkill>
+        <requiredSkillLevel>3</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantTendOthersMedical</defName>
+        <label>practice tends</label>
+        <description>I'd like to practice tending the wounded, at least 20 tends should do it.</description>
+        <iconPath>UI/WantIcons/Tend</iconPath>
+        <reward>1500</reward>
+        <commonality>1.5</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>TimesTendedOther</targetRecord>
+        <countThreshold>20</countThreshold>
+        <requiredSkill>Medicine</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantBodiesStripped</defName>
+        <label>strip dead people</label>
+        <description>I'd like to see people at their barest. Stripping just 10 bodies would be enough.</description>
+        <iconPath>UI/WantIcons/Corpse</iconPath>
+        <reward>2000</reward>
+        <commonality>0.05</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>BodiesStripped</targetRecord>
+        <countThreshold>10</countThreshold>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantContainersOpened</defName>
+        <label>open containers</label>
+        <description>I'd like the basic thrill of unboxing stuff. Five should do it.</description>
+        <iconPath>UI/WantIcons/Unboxing</iconPath>
+        <reward>1000</reward>
+        <commonality>0.1</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>ContainersOpened</targetRecord>
+        <countThreshold>5</countThreshold>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantOperationsPerformed</defName>
+        <label>perform surgery</label>
+        <description>I'd like to get some practice in and perform a surgery.</description>
+        <iconPath>UI/WantIcons/Surgery</iconPath>
+        <reward>1500</reward>
+        <commonality>1</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>OperationsPerformed</targetRecord>
+        <countThreshold>1</countThreshold>
+        <requiredSkill>Medicine</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantCorpsesBuried</defName>
+        <label>bury a corpse</label>
+        <description>I'd like to feel the sensation of putting someone to rest.</description>
+        <iconPath>UI/WantIcons/BuryProud</iconPath>
+        <reward>500</reward>
+        <commonality>1</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>CorpsesBuried</targetRecord>
+        <countThreshold>1</countThreshold>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantFirstPrisonerRecruited</defName>
+        <label>Recruit my first prisoner</label>
+        <description>I'd like to try my skills at recruiting my first prisoner.</description>
+        <iconPath>UI/WantIcons/Meet</iconPath>
+        <reward>2000</reward>
+        <commonality>0.8</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_Record</workerClass>
+        <targetRecord>PrisonersRecruited</targetRecord>
+        <countThreshold>1</countThreshold>
+        <requiredSkill>Social</requiredSkill>
+        <requiredSkillLevel>5</requiredSkillLevel>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantPrisonersRecruited</defName>
+        <label>Recruit a prisoner</label>
+        <description>I'd like to utilize my skills to recruit a prisoner.</description>
+        <iconPath>UI/WantIcons/Meet</iconPath>
+        <reward>1500</reward>
+        <commonality>0.8</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>PrisonersRecruited</targetRecord>
+        <countThreshold>1</countThreshold>
+        <requiredSkill>Social</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantFirstAnimalTamed</defName>
+        <label>Tame my first animal</label>
+        <description>I'd like to try taming an animal.</description>
+        <iconPath>UI/WantIcons/Bond</iconPath>
+        <reward>1800</reward>
+        <commonality>1</commonality>
+        <invalidTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_AnimalHater</li>
+        </invalidTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Record</workerClass>
+        <targetRecord>AnimalsTamed</targetRecord>
+        <countThreshold>1</countThreshold>
+        <requiredSkill>Animals</requiredSkill>
+        <requiredSkillLevel>3</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantAnimalsTamed</defName>
+        <label>Tame animals</label>
+        <description>I'd like to utilize my skills to tame a host of animals. Five should do it.</description>
+        <iconPath>UI/WantIcons/Bond</iconPath>
+        <reward>2000</reward>
+        <commonality>1</commonality>
+        <invalidTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_AnimalHater</li>
+        </invalidTraits>
+        <workerClass>WantsAndQuirks.WantWorker_RecordChange</workerClass>
+        <targetRecord>AnimalsTamed</targetRecord>
+        <countThreshold>5</countThreshold>
+        <requiredSkill>Animals</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantBeatCancer</defName>
+        <label>Beat cancer</label>
+        <description>I have to beat this cancer.</description>
+        <iconPath>UI/WantIcons/Muscle</iconPath>
+        <reward>4000</reward>
+        <commonality>2.5</commonality>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_CureHediff</workerClass>
+        <targetHediff>Carcinoma</targetHediff>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphagenes">
+        <defName>WQE_WantMeetAngelic</defName>
+        <label>Meet someone with angelic beauty</label>
+        <description>I'd love to be inspired by another's beauty.</description>
+        <iconPath>UI/WantIcons/Beautiful</iconPath>
+        <reward>800</reward>
+        <commonality>0.4</commonality>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>AG_Awe</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphagenes">
+        <defName>WQE_WantUsedXenotypeInjector</defName>
+        <label>Use a xenotype injector</label>
+        <description>I want to change my xenotype with one of those injectors.</description>
+        <iconThingPath>AG_XenotypeInjector</iconThingPath>        
+        <reward>3000</reward>
+        <commonality>0.5</commonality>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>AG_UsedXenotypeInjector</completedByThought>
+        <discoveryRequirementThing>AG_XenotypeInjector</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphabooks">
+        <defName>WQE_WantLearnDurathread</defName>
+        <label>Learn durathread</label>
+        <description>I'd like to know how to make things with durathread from one of those books.</description>
+        <iconThingPath>ABooks_DurathreadTechniques</iconThingPath>        
+        <reward>2000</reward>
+        <commonality>1</commonality>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_HasHediff</workerClass>
+        <targetHediff>ABooks_DurathreadTechniques</targetHediff>
+        <discoveryRequirementThing>ABooks_DurathreadTechniques</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphabooks">
+        <defName>WQE_WantLearnStainlessSteel</defName>
+        <label>Learn stainless steel</label>
+        <description>I would like to know how to make things with stainless steel from one of those books.</description>
+        <iconThingPath>ABooks_TreatiseOfStainlessSteel</iconThingPath>
+        <reward>2000</reward>
+        <commonality>1</commonality>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_HasHediff</workerClass>
+        <targetHediff>ABooks_TreatiseOfStainlessSteel</targetHediff>
+        <discoveryRequirementThing>ABooks_TreatiseOfStainlessSteel</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphabooks">
+        <defName>WQE_WantReadSelfHelpBook</defName>
+        <label>Read a self-help book</label>
+        <description>I want to read one of those self-help books so I can get better.</description>
+        <iconThingPath>ABooks_SelfHelpBook</iconThingPath>
+        <reward>1000</reward>
+        <commonality>0.5</commonality>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>ABooks_SelfHelpBookThought</completedByThought>
+        <discoveryRequirementThing>ABooks_SelfHelpBook</discoveryRequirementThing>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="sarg.alphabooks">
+        <defName>WQE_WantReadPortentsBook</defName>
+        <label>Read a book of portents</label>
+        <description>I'd like to read one of those books of portents.</description>
+        <iconThingPath>ABooks_BookOfPortents</iconThingPath>
+        <reward>1000</reward>
+        <commonality>0.4</commonality>
+        <minimumTechLevel>Medieval</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>ABooks_BookOfPortentsThought</completedByThought>
+        <discoveryRequirementThing>ABooks_BookOfPortents</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="Ludeon.RimWorld.Anomaly">
+        <defName>WQE_WantCureInhumanized</defName>
+        <label>Restore humanization</label>
+        <description>Maybe there's a path to free my mind of the void.</description>
+        <iconPath>UI/WantIcons/Composure</iconPath>
+        <reward>4000</reward>
+        <commonality>0.2</commonality>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_CureHediff</workerClass>
+        <targetHediff>Inhumanized</targetHediff>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="weilbyte.snapout">
+        <defName>WQE_WantHelpSnapOut</defName>
+        <label>Help calm someone</label>
+        <description>I'd feel good about my skill to help calm someone during their mental break.</description>
+        <iconPath>UI/WantIcons/CalmDown</iconPath>
+        <reward>1000</reward>
+        <commonality>0.4</commonality>
+        <!-- <requiredTraits>
+            <li>Kind</li>
+        </requiredTraits> -->
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>SnapOut_HelpedSomeoneThought</completedByThought>
+        <requiredSkill>Social</requiredSkill>
+        <requiredSkillLevel>10</requiredSkillLevel>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VCEF">
+        <defName>WQE_WantGoFishing</defName>
+        <label>Go fishing</label>
+        <description>I'd like to go fishing.</description>
+        <iconPath>UI/WantIcons/Fishing</iconPath>
+        <reward>250</reward>
+        <commonality>1</commonality>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VCEF_FishingThought</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VEE">
+        <defName>WQE_WantSeePsychicAurora</defName>
+        <label>See a psychic aurora</label>
+        <description>I've heard of the fabled psychic auroras. I'd like to experience one.</description>
+        <iconPath>UI/WantIcons/Aurora</iconPath>
+        <reward>3000</reward>
+        <commonality>0.1</commonality>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VEE_Aurora</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="vat.epoeforked">
+        <defName>WQE_WantOrganicOptimization</defName>
+        <label>Get organic nanobots</label>
+        <description>I'd like to have organic optimizer nanobots implanted.</description>
+        <iconPath>UI/WantIcons/Muscle</iconPath>
+        <reward>3000</reward>
+        <commonality>2</commonality>
+        <requiredTraits>
+            <li>BodyPurist</li>
+        </requiredTraits>
+        <minimumTechLevel>Spacer</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>EPOE_OrganicOptimizedBodyPurist</completedByThought>
+        <discoveryRequirementThing>EPOE_OrganicOptimizingNanobots</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="Ludeon.RimWorld.Biotech">
+        <defName>WQE_WantTerminatePregnancy</defName>
+        <label>Terminate pregnancy</label>
+        <description>I can't bear this child any longer. I'm sick of feeling like this.</description>
+        <iconPath>UI/WantIcons/Suicidal</iconPath>
+        <reward>3000</reward>
+        <commonality>0.6</commonality>
+        <requiredHediffs>
+            <li>PregnantHuman</li>
+        </requiredHediffs>
+        <workerClass>WantsAndQuirks.WantWorker_ThoughtAny</workerClass>
+        <targetThoughts>
+            <li>PregnancyTerminated</li>
+            <li>PregnancyEnded</li>
+            <li>Stillbirth</li>
+            <li>Miscarried</li>
+        </targetThoughts>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantSeeSomeoneDie</defName>
+        <label>Witness death</label>
+        <description>Maybe I'd like to see someone lose their life.</description>
+        <iconPath>UI/WantIcons/Murder</iconPath>
+        <reward>1200</reward>
+        <commonality>0.4</commonality>
+        <invalidTraits>
+            <li>Bloodlust</li>
+        </invalidTraits>
+        <invalidHediffs>
+            <li MayRequire="Ludeon.RimWorld.Anomaly">Inhumanized</li>
+        </invalidHediffs>
+        <workerClass>WantsAndQuirks.WantWorker_ThoughtAny</workerClass>
+        <targetThoughts>
+            <li>WitnessedDeathNonAlly</li>
+            <li>WitnessedDeathAlly</li>
+            <li>WitnessedDeathFamily</li>
+        </targetThoughts>
+        <isMentalBreakWant>true</isMentalBreakWant>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantSeeSomeoneDie_Bloodlust</defName>
+        <label>Witness death</label>
+        <description>I'd love to watch someone die in front of me.</description>
+        <iconPath>UI/WantIcons/Murder</iconPath>
+        <reward>800</reward>
+        <commonality>1.2</commonality>
+        <requiredTraits>
+            <li>Bloodlust</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>WitnessedDeathBloodlust</completedByThought>
+        <invalidNonViolent>true</invalidNonViolent>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantKillSomeone_Bloodlust</defName>
+        <label>Murder somebody</label>
+        <description>I really need to murder someone right now.</description>
+        <iconPath>UI/WantIcons/Murder</iconPath>
+        <reward>800</reward>
+        <commonality>1.2</commonality>
+        <requiredTraits>
+            <li>Bloodlust</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>KilledHumanlikeBloodlust</completedByThought>
+        <invalidNonViolent>true</invalidNonViolent>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef>
+        <defName>WQE_WantUseFlameWeapon</defName>
+        <label>Use a flame weapon</label>
+        <description>I'd like to use a flame weapon to burn my enemies to a crisp.</description>
+        <iconPath>UI/WantIcons/Flamethrower</iconPath>
+        <reward>600</reward>
+        <commonality>0.7</commonality>
+        <requiredTraits>
+            <li>Pyromaniac</li>
+        </requiredTraits>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>PyroUsed</completedByThought>
+        <invalidNonViolent>true</invalidNonViolent>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VFESpacer">
+        <defName>WQE_WantAirPurifier</defName>
+        <label>Breathe purified air</label>
+        <description>I think air from an air purifier would help my breathing.</description>
+        <iconThingPath>VFES_AirPurifier</iconThingPath>
+        <reward>450</reward>
+        <commonality>1.4</commonality>
+        <requiredHediffs>
+            <li>Asthma</li>
+        </requiredHediffs>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VFES_FreshAir</completedByThought>
+        <discoveryRequirementThing>VFES_AirPurifier</discoveryRequirementThing>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VanillaTraitsExpanded">
+        <defName>WQE_WantKillMechanoid_Technophobe</defName>
+        <label>Destroy a mechanoid</label>
+        <description>I'd like to go destroy another of those awful mechanoids.</description>
+        <iconPath>UI/WantIcons/KillMechanoid</iconPath>
+        <reward>800</reward>
+        <commonality>2</commonality>
+        <requiredTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_Technophobe</li>
+        </requiredTraits>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VTE_MechanoidIsKilled</completedByThought>
+        <invalidNonViolent>true</invalidNonViolent>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VanillaTraitsExpanded">
+        <defName>WQE_WantWatchTelevision_CouchePotato</defName>
+        <label>Watch television</label>
+        <description>I'm bored. I want to watch television.</description>
+        <iconPath>UI/WantIcons/WatchTV</iconPath>
+        <reward>200</reward>
+        <commonality>2</commonality>
+        <requiredTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_CouchPotato</li>
+        </requiredTraits>
+        <minimumTechLevel>Industrial</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VTE_WatchedTelevisor</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VanillaTraitsExpanded">
+        <defName>WQE_WantVisitOcean_ChildOfSea</defName>
+        <label>See the ocean</label>
+        <description>I'd like to return to the ocean or a deer river again.</description>
+        <iconPath>UI/WantIcons/SeeOcean</iconPath>
+        <reward>1000</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_ChildOfSea</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VTE_ChildOfSea</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VanillaTraitsExpanded">
+        <defName>WQE_WantVisitMountain_MountainLover</defName>
+        <label>See the mountains</label>
+        <description>I'd like to return to the mountains again.</description>
+        <iconPath>UI/WantIcons/SeeMountains</iconPath>
+        <reward>1000</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_ChildOfMountain</li>
+        </requiredTraits>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VTE_ChildOfMountain</completedByThought>
+    </WantsAndQuirks.WantDef>
+
+    <WantsAndQuirks.WantDef MayRequire="VanillaExpanded.VanillaTraitsExpanded">
+        <defName>WQE_WantHarvestOrgan_MadSurgeon</defName>
+        <label>Harvest an organ</label>
+        <description>It's about time I harvest another organ.</description>
+        <iconPath>UI/WantIcons/OrganHarvest</iconPath>
+        <reward>1000</reward>
+        <commonality>1.5</commonality>
+        <requiredTraits>
+            <li MayRequire="VanillaExpanded.VanillaTraitsExpanded">VTE_MadSurgeon</li>
+        </requiredTraits>
+        <minimumTechLevel>Neolithic</minimumTechLevel>
+        <workerClass>WantsAndQuirks.WantWorker_Thought</workerClass>
+        <completedByThought>VTE_HarvestedOrgans</completedByThought>
+    </WantsAndQuirks.WantDef>
 
 <!-- THOUGHTS TO DO
 

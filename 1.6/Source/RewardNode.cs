@@ -14,6 +14,8 @@ namespace WantsAndQuirks
         public Vector2 drawPos;
         [Unsaved(false)]
         public Vector2 dampVelocity;
+        [Unsaved(false)]
+        public float spawnRealTime = -1f;
 
         public void ExposeData()
         {

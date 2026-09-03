@@ -23,6 +23,8 @@ namespace WantsAndQuirks
         private static Color RareBubbleColor = new Color(0.6f, 0.4f, 0.8f, 0.85f);
         private static Color UncommonBubbleColor = new Color(0.3f, 0.6f, 0.8f, 0.85f);
         private static Color CommonBubbleColor = new Color(0.4f, 0.4f, 0.4f, 0.85f);
+        private static Color NewRewardGlowColor = new Color(1f, 0.85f, 0.35f, 1f);
+        private const float NewRewardGlowDuration = 2.5f;
         private RewardNode draggedNode;
         private Vector2 dragStartMousePos;
         private bool wasDraggingNode;
@@ -419,6 +421,20 @@ namespace WantsAndQuirks
                 var r = GetRadius(node.def.rarity);
                 var nodeCenter = new Vector2(center.x + node.drawPos.x, center.y + node.drawPos.y);
                 var nodeRect = new Rect(nodeCenter.x - r, nodeCenter.y - r, r * 2f, r * 2f);
+
+                if (node.spawnRealTime >= 0f)
+                {
+                    var glowAge = Time.realtimeSinceStartup - node.spawnRealTime;
+                    if (glowAge < NewRewardGlowDuration)
+                    {
+                        var glowT = glowAge / NewRewardGlowDuration;
+                        var glowRadius = r * (1f + glowT * 0.6f);
+                        var glowRect = new Rect(nodeCenter.x - glowRadius, nodeCenter.y - glowRadius, glowRadius * 2f, glowRadius * 2f);
+                        GUI.color = new Color(NewRewardGlowColor.r, NewRewardGlowColor.g, NewRewardGlowColor.b, (1f - glowT) * 0.8f);
+                        GUI.DrawTexture(glowRect, BubbleTex);
+                        GUI.color = Color.white;
+                    }
+                }
 
                 GUI.color = GetBubbleColor(node.def.rarity);
                 if (Mouse.IsOver(nodeRect))

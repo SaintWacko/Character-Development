@@ -337,7 +337,8 @@ while (pawnData.characterPoints >= pawnNeeded)
                     def = chosenDef,
                     item = chosenItem,
                     pawnTarget = chosenPawn,
-                    pos = new Vector2(Rand.Range(-100f, 100f), Rand.Range(-100f, 100f))
+                    pos = new Vector2(Rand.Range(-100f, 100f), Rand.Range(-100f, 100f)),
+                    spawnRealTime = Time.realtimeSinceStartup
                 };
                 node.drawPos = node.pos;
                 return node;
@@ -398,11 +399,9 @@ while (pawnData.characterPoints >= pawnNeeded)
                     }
                     else
                     {
-                        want = new ActiveWant
-                        {
-                            def = def,
-                            assignedTick = Find.TickManager.TicksGame
-                        };
+                        want = def.Worker.CreateActiveWant(pawn);
+                        want.def = def;
+                        want.assignedTick = Find.TickManager.TicksGame;
                     }
                 }
             }
@@ -438,7 +437,7 @@ while (pawnData.characterPoints >= pawnNeeded)
             {
                 availableDefs.RemoveAll(d => d.isMentalBreakWant);
             }
-            if (availableDefs.TryRandomElementByWeight(x => x.commonality, out var chosenDef))
+            if (availableDefs.TryRandomElementByWeight(x => x.commonality * WantsAndQuirksMod.settings.GetCommonalityMultiplier(x), out var chosenDef))
             {
                 var targetPawn = chosenDef.Worker.GetRandomTargetPawn(pawn);
                 if (targetPawn != null)

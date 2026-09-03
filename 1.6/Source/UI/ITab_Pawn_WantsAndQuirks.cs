@@ -19,6 +19,8 @@ namespace WantsAndQuirks
         private static Color PointsColor = new ColorInt(166, 187, 194).ToColor;
         private static Color MentalBreakRectColor = new ColorInt(57, 45, 45).ToColor;
         private static Color MentalBreakTextColor = new ColorInt(184, 133, 134).ToColor;
+        private static Color ProgressBarTrackColor = new Color(1f, 1f, 1f, 0.08f);
+        private static Color ProgressBarFillColor = new ColorInt(126, 206, 214).ToColor;
 
         public ITab_Pawn_WantsAndQuirks()
         {
@@ -121,6 +123,14 @@ namespace WantsAndQuirks
                 var wantRect = new Rect(0f, listY, viewRect.width, 80f);
 
                 Widgets.DrawBoxSolid(wantRect, want.def.isMentalBreakWant ? MentalBreakRectColor : WantBgColor);
+
+                if (want.def.Worker.TryGetProgress(pawn, want, out var progCurrent, out var progTarget) && progTarget > 0f)
+                {
+                    var barRect = new Rect(wantRect.x, wantRect.y, wantRect.width, 2.5f);
+                    Widgets.DrawBoxSolid(barRect, ProgressBarTrackColor);
+                    var fillWidth = barRect.width * Mathf.Clamp01(progCurrent / progTarget);
+                    Widgets.DrawBoxSolid(new Rect(barRect.x, barRect.y, fillWidth, barRect.height), ProgressBarFillColor);
+                }
 
                 var iconRect = new Rect(wantRect.x + 10f, wantRect.y + 20f, 50f, 50f);
                 GUI.color = new Color(1f, 1f, 1f, 0.8f);

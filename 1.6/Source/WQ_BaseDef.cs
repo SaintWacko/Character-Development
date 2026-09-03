@@ -26,6 +26,8 @@ namespace WantsAndQuirks
         public XenotypeDef discoveryRequirementXenotype;
         public List<PawnRelationDef> requiredRelations;
         public Gender? requiredRelationGender = null;
+        public SkillDef requiredSkill;
+        public int requiredSkillLevel;
 
         public virtual bool CanGenerate()
         {
@@ -52,6 +54,8 @@ namespace WantsAndQuirks
         public bool PassesRecipientFilter(Pawn pawn)
         {
             if (invalidNonViolent && pawn.WorkTagIsDisabled(WorkTags.Violent))
+                return false;
+            if (requiredSkill != null && (pawn.skills == null || pawn.skills.GetSkill(requiredSkill).Level < requiredSkillLevel))
                 return false;
             if (invalidTraits != null)
             {

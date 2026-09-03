@@ -24,10 +24,8 @@ namespace WantsAndQuirks
             .Where(w => w.isMentalBreakWant && !data.activeWants.Any(aw => aw.def == w) && w.Worker.CanHaveWant(pawn) && w.Worker.CanGenerate(pawn))
             .ToList();
 
-            if (mentalWants.Count == 0)
+            if (!mentalWants.TryRandomElementByWeight(w => w.commonality * WantsAndQuirksMod.settings.GetCommonalityMultiplier(w), out var chosen))
                 return false;
-
-            var chosen = mentalWants.RandomElement();
             ActiveWant replaced = null;
 
             if (data.activeWants.Count >= WantsAndQuirksMod.settings.maxActiveWants || (data.activeWants.Count > 0 && Rand.Bool))

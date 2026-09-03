@@ -1,8 +1,17 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
 namespace WantsAndQuirks
 {
+    public enum WantSettingsTab
+    {
+        General,
+        Wants,
+        TraumaticWants
+    }
+
     public class WantsAndQuirksSettings : ModSettings
     {
         public bool enableWantsSystem = true;
@@ -20,6 +29,16 @@ namespace WantsAndQuirks
         public int maxActiveWants = 4;
         public IntRange wantGenerationFrequencyDays = new IntRange(1, 8);
         public bool pawnSpecificRewardPoints = false;
+        public HashSet<string> disabledWantDefNames = new HashSet<string>();
+        public Dictionary<string, float> wantCommonalityModifiers = new Dictionary<string, float>();
+
+        private List<WantDef> normalWantDefsCache;
+        private List<WantDef> traumaticWantDefsCache;
+        private WantSettingsTab currentTab = WantSettingsTab.General;
+        private Vector2 wantsScrollPosition;
+        private Vector2 traumaticWantsScrollPosition;
+        private float wantsViewHeight = 1000f;
+        private float traumaticWantsViewHeight = 1000f;
 
         public override void ExposeData()
         {
@@ -37,12 +56,65 @@ namespace WantsAndQuirks
             Scribe_Values.Look(ref maxActiveWants, "maxActiveWants", 4);
             Scribe_Values.Look(ref wantGenerationFrequencyDays, "wantGenerationFrequencyDays", new IntRange(1, 8));
             Scribe_Values.Look(ref pawnSpecificRewardPoints, "pawnSpecificRewardPoints", true);
+            Scribe_Collections.Look(ref disabledWantDefNames, "disabledWantDefNames", LookMode.Value);
+            disabledWantDefNames ??= new HashSet<string>();
+            Scribe_Collections.Look(ref wantCommonalityModifiers, "wantCommonalityModifiers", LookMode.Value, LookMode.Value);
+            wantCommonalityModifiers ??= new Dictionary<string, float>();
+        }
+
+        public float GetCommonalityModifierPercent(WantDef def)
+        {
+            return wantCommonalityModifiers.TryGetValue(def.defName, out var pct) ? pct : 100f;
+        }
+
+        public float GetCommonalityMultiplier(WantDef def)
+        {
+            return GetCommonalityModifierPercent(def) / 100f;
+        }
+
+        private void EnsureWantDefCaches()
+        {
+            if (normalWantDefsCache != null)
+                return;
+
+            var allWants = DefDatabase<WantDef>.AllDefsListForReading;
+            normalWantDefsCache = allWants.Where(d => !d.isMentalBreakWant).OrderBy(d => d.label).ToList();
+            traumaticWantDefsCache = allWants.Where(d => d.isMentalBreakWant).OrderBy(d => d.label).ToList();
         }
 
         public void DoSettingsWindowContents(Rect inRect)
         {
+            EnsureWantDefCaches();
+
+            var contentRect = inRect;
+            contentRect.yMin += 32f;
+
+            var tabs = new List<TabRecord>
+            {
+                new TabRecord("WQ_SettingsTabGeneral".Translate(), () => currentTab = WantSettingsTab.General, currentTab == WantSettingsTab.General),
+                new TabRecord("WQ_SettingsTabWants".Translate(), () => currentTab = WantSettingsTab.Wants, currentTab == WantSettingsTab.Wants),
+                new TabRecord("WQ_SettingsTabTraumaticWants".Translate(), () => currentTab = WantSettingsTab.TraumaticWants, currentTab == WantSettingsTab.TraumaticWants)
+            };
+            TabDrawer.DrawTabs(contentRect, tabs);
+
+            switch (currentTab)
+            {
+                case WantSettingsTab.Wants:
+                    DrawWantDefListTab(contentRect, normalWantDefsCache, ref wantsScrollPosition, ref wantsViewHeight);
+                    break;
+                case WantSettingsTab.TraumaticWants:
+                    DrawWantDefListTab(contentRect, traumaticWantDefsCache, ref traumaticWantsScrollPosition, ref traumaticWantsViewHeight);
+                    break;
+                default:
+                    DrawGeneralTab(contentRect);
+                    break;
+            }
+        }
+
+        private void DrawGeneralTab(Rect rect)
+        {
             var ls = new Listing_Standard();
-            ls.Begin(inRect);
+            ls.Begin(rect);
             ls.CheckboxLabeled("WQ_EnableWantsSystem".Translate(), ref enableWantsSystem);
             ls.CheckboxLabeled("WQ_EnableCharactersMenu".Translate(), ref enableCharactersMenu);
             ls.CheckboxLabeled("WQ_EnableMentalBreakWants".Translate(), ref enableMentalBreakWants);
@@ -64,6 +136,93 @@ namespace WantsAndQuirks
             ls.Label("WQ_WantGenerationFrequency".Translate(wantGenerationFrequencyDays.min, wantGenerationFrequencyDays.max));
             ls.IntRange(ref wantGenerationFrequencyDays, 1, 60);
             ls.End();
+        }
+
+        private static Texture GetDisplayIcon(WantDef def)
+        {
+            if (def.discoveryRequirementThing != null && !def.preferIconPath)
+                return def.discoveryRequirementThing.uiIcon;
+            return def.Icon;
+        }
+
+        private void DrawWantDefListTab(Rect rect, List<WantDef> defs, ref Vector2 scrollPos, ref float viewHeight)
+        {
+            var viewRect = new Rect(0f, 0f, rect.width - 16f, viewHeight);
+            Widgets.BeginScrollView(rect, ref scrollPos, viewRect);
+
+            var ls = new Listing_Standard();
+            ls.Begin(viewRect);
+            ls.maxOneColumn = true;
+
+            const float iconSize = 64f;
+            const float checkboxHeight = 24f;
+            const float labelHeight = 20f;
+            const float sliderHeight = 24f;
+            const float innerGap = 4f;
+            const float blockHeight = checkboxHeight + innerGap + labelHeight + innerGap + sliderHeight;
+
+            for (int i = 0; i < defs.Count; i++)
+            {
+                var def = defs[i];
+                var enabled = !disabledWantDefNames.Contains(def.defName);
+                var rowTint = enabled ? Color.white : new Color(1f, 1f, 1f, 0.4f);
+                var priorColor = GUI.color;
+
+                var rowRect = ls.GetRect(blockHeight);
+                var iconRect = new Rect(rowRect.x, rowRect.y, iconSize, rowRect.height);
+                var contentX = rowRect.x + iconSize + 8f;
+                var contentWidth = rowRect.width - iconSize - 8f;
+
+                var icon = GetDisplayIcon(def);
+                if (icon != null)
+                {
+                    var scale = Mathf.Min(1f, Mathf.Min(iconRect.width / icon.width, iconRect.height / icon.height));
+                    var drawWidth = icon.width * scale;
+                    var drawHeight = icon.height * scale;
+                    var iconDrawRect = new Rect(
+                        iconRect.x + (iconRect.width - drawWidth) / 2f,
+                        iconRect.y + (iconRect.height - drawHeight) / 2f,
+                        drawWidth, drawHeight);
+                    GUI.color = rowTint;
+                    GUI.DrawTexture(iconDrawRect, icon);
+                    GUI.color = priorColor;
+                }
+
+                var checkRect = new Rect(contentX, rowRect.y, contentWidth, checkboxHeight);
+                GUI.color = rowTint;
+                Widgets.CheckboxLabeled(checkRect, def.LabelCap, ref enabled);
+                GUI.color = priorColor;
+                if (enabled)
+                    disabledWantDefNames.Remove(def.defName);
+                else
+                    disabledWantDefNames.Add(def.defName);
+
+                var modifierPct = GetCommonalityModifierPercent(def);
+                var labelRect = new Rect(contentX, checkRect.yMax + innerGap, contentWidth, labelHeight);
+                GUI.color = rowTint;
+                Widgets.Label(labelRect, "WQ_CommonalityModifier".Translate(Mathf.RoundToInt(modifierPct)));
+                GUI.color = priorColor;
+
+                var sliderRect = new Rect(contentX, labelRect.yMax + innerGap, contentWidth, sliderHeight);
+                GUI.color = rowTint;
+                GUI.enabled = enabled;
+                var newModifierPct = Widgets.HorizontalSlider(sliderRect, modifierPct, 0f, 300f);
+                GUI.enabled = true;
+                GUI.color = priorColor;
+                if (enabled && !Mathf.Approximately(newModifierPct, modifierPct))
+                {
+                    if (Mathf.Approximately(newModifierPct, 100f))
+                        wantCommonalityModifiers.Remove(def.defName);
+                    else
+                        wantCommonalityModifiers[def.defName] = newModifierPct;
+                }
+
+                ls.GapLine();
+            }
+            ls.End();
+            viewHeight = ls.CurHeight;
+
+            Widgets.EndScrollView();
         }
     }
 }
