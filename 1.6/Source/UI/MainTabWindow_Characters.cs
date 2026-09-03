@@ -514,18 +514,20 @@ namespace WantsAndQuirks
 
         private void ClaimReward(RewardNode node)
         {
-            var allCandidates = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction
-                .Where(p => p.CanHaveWants() && node.def.Worker.CanBestowOn(p, node.item, node.pawnTarget)).ToList();
+            var allCandidates = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive
+                .Where(p => p.CanHaveWants() && (p.Faction == Faction.OfPlayer || p.IsSlaveOfColony)).ToList();
 
             List<Pawn> recipients;
             if (WantsAndQuirksMod.settings.pawnSpecificRewardPoints)
             {
-                recipients = allCandidates.Where(p => p.GetWantsData().rewardPoints > 0).ToList();
-                if (recipients.Count == 0 && allCandidates.Count > 0)
+                var pawnsWithRewardPoints = allCandidates.Where(p => p.GetWantsData().rewardPoints > 0).ToList();
+                if (pawnsWithRewardPoints.Count == 0)
                 {
                     Messages.Message("WQ_NoPawnRewardPoints".Translate(), MessageTypeDefOf.RejectInput, false);
                     return;
                 }
+
+                recipients = pawnsWithRewardPoints.Where(p => node.def.Worker.CanBestowOn(p, node.item, node.pawnTarget)).ToList();
             }
             else
             {
@@ -534,7 +536,7 @@ namespace WantsAndQuirks
                     Messages.Message("WQ_NotEnoughRewardPoints".Translate(), MessageTypeDefOf.RejectInput, false);
                     return;
                 }
-                recipients = allCandidates;
+                recipients = allCandidates.Where(p => node.def.Worker.CanBestowOn(p, node.item, node.pawnTarget)).ToList();
             }
 
             if (recipients.Count == 0)
